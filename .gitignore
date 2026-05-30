@@ -4,5 +4,6 @@
 /HeartFeel-web-backend/.temp/
 /HeartFeel-web-frontend/dist/
 /HeartFeel-web-frontend/node_modules/
-!/HeartFeel-web-frontend/node_modules/
 
+/HeartFeel-web-frontend/_cacache/
+/HeartFeel-web-frontend/_locks/
