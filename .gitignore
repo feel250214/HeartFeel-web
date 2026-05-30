@@ -1,0 +1,6 @@
+/HeartFeel-web-backend/src/main/resources/application-local.yml
+/HeartFeel-web-backend/src/main/resources/application-prod.yml
+/HeartFeel-web-backend/target/
+/HeartFeel-web-backend/.temp/
+/HeartFeel-web-frontend/dist/
+/HeartFeel-web-frontend/node_modules/
