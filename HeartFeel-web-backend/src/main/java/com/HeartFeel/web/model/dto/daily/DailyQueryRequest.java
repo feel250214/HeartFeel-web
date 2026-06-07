@@ -32,6 +32,11 @@ public class DailyQueryRequest extends PageRequest implements Serializable {
     private String searchText;
 
     /**
+     * Tags.
+     */
+    private List<String> tags;
+
+    /**
      * 创建用户 id
      */
     private Long userId;
@@ -50,6 +55,11 @@ public class DailyQueryRequest extends PageRequest implements Serializable {
      * Cover image COS path.
      */
     private String coverPath;
+
+    /**
+     * Whether this diary is visible to all logged-in users.
+     */
+    private Integer isPublic;
 
     /**
      * 状态

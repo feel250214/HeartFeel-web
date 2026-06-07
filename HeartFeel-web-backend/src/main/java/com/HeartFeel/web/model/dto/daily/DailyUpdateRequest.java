@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 更新请求
@@ -38,6 +39,16 @@ public class DailyUpdateRequest implements Serializable {
      * Markdown content from ByteMD. Null means do not update content.
      */
     private String content;
+
+    /**
+     * Tags.
+     */
+    private List<String> tags;
+
+    /**
+     * Whether this diary is visible to all logged-in users.
+     */
+    private Integer isPublic;
 
     /**
      * 状态

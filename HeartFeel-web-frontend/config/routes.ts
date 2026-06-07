@@ -13,6 +13,7 @@ export default [
   // 日记路径
   {
     path: '/daily/home',
+    access: 'canUser',
     icon: 'BookOutlined',
     component: './Daily/Home',
     name: '日记主页',

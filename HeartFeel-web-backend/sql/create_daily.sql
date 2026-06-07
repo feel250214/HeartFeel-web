@@ -10,6 +10,8 @@ create table if not exists daily
     name       varchar(128)                       null comment '名称',
     distPath   text                               null comment '日记路径',
     coverPath  varchar(512)                       null comment '封面图片路径',
+    tags       varchar(1024)                      null comment '标签列表（json 数组）',
+    isPublic   tinyint  default 0                 not null comment '是否公开',
     status     int      default 0                 not null comment '状态',
     userId     bigint                             not null comment '创建用户 id',
     createTime datetime default CURRENT_TIMESTAMP not null comment '创建时间',

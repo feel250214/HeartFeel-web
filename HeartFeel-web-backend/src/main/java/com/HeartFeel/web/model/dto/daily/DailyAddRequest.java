@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 创建请求
@@ -33,6 +34,16 @@ public class DailyAddRequest implements Serializable {
      * Markdown content from ByteMD.
      */
     private String content;
+
+    /**
+     * Tags.
+     */
+    private List<String> tags;
+
+    /**
+     * Whether this diary is visible to all logged-in users.
+     */
+    private Integer isPublic;
 
     /**
      * 状态

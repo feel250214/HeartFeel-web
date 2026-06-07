@@ -34,6 +34,16 @@ public class Daily {
     private String coverPath;
 
     /**
+     * Tags JSON array string.
+     */
+    private String tags;
+
+    /**
+     * Whether this diary is visible to all logged-in users.
+     */
+    private Integer isPublic;
+
+    /**
      * 状态
      */
     private Integer status;

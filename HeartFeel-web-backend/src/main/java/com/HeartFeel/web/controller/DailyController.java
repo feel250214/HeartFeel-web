@@ -12,7 +12,6 @@ import com.HeartFeel.web.config.CosClientConfig;
 import com.HeartFeel.web.constant.UserConstant;
 import com.HeartFeel.web.exception.BusinessException;
 import com.HeartFeel.web.exception.ThrowUtils;
-import com.HeartFeel.web.manager.CacheManager;
 import com.HeartFeel.web.manager.CosManager;
 import com.HeartFeel.web.model.dto.daily.DailyAddRequest;
 import com.HeartFeel.web.model.dto.daily.DailyEditRequest;
@@ -44,6 +43,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 /**
  * Daily diary API.
@@ -67,9 +67,6 @@ public class DailyController {
     @Resource
     private CosClientConfig cosClientConfig;
 
-    @Resource
-    private CacheManager cacheManager;
-
     /**
      * Create a diary. The ByteMD markdown content is stored as a local .md file
      * and uploaded to COS. The COS key is saved in distPath.
@@ -81,11 +78,14 @@ public class DailyController {
         }
         Daily daily = new Daily();
         BeanUtils.copyProperties(dailyAddRequest, daily);
+        List<String> tags = dailyAddRequest.getTags();
+        daily.setTags(JSONUtil.toJsonStr(tags));
 
         dailyService.validDaily(daily, true);
         User loginUser = userService.getLoginUser(request);
         daily.setUserId(loginUser.getId());
         daily.setStatus(dailyAddRequest.getStatus() == null ? 0 : dailyAddRequest.getStatus());
+        daily.setIsPublic(dailyAddRequest.getIsPublic() == null ? 0 : dailyAddRequest.getIsPublic());
         boolean saveResult = dailyService.save(daily);
         ThrowUtils.throwIf(!saveResult, ErrorCode.OPERATION_ERROR);
 
@@ -145,6 +145,8 @@ public class DailyController {
 
         Daily daily = new Daily();
         BeanUtils.copyProperties(dailyUpdateRequest, daily);
+        List<String> tags = dailyUpdateRequest.getTags();
+        daily.setTags(JSONUtil.toJsonStr(tags));
         if (StrUtil.isBlank(daily.getDistPath())) {
             daily.setDistPath(null);
         }
@@ -165,7 +167,7 @@ public class DailyController {
         User loginUser = userService.getLoginUser(request);
         Daily daily = dailyService.getById(id);
         ThrowUtils.throwIf(daily == null, ErrorCode.NOT_FOUND_ERROR);
-        checkDailyOwnerOrAdmin(daily, loginUser);
+        checkDailyReadable(daily, loginUser);
 
         DailyVO dailyVO = dailyService.getDailyVO(daily, request);
         dailyVO.setContent(getDailyContent(daily.getDistPath()));
@@ -184,7 +186,7 @@ public class DailyController {
         User loginUser = userService.getLoginUser(request);
         Daily daily = dailyService.getById(id);
         ThrowUtils.throwIf(daily == null, ErrorCode.NOT_FOUND_ERROR);
-        checkDailyOwnerOrAdmin(daily, loginUser);
+        checkDailyReadable(daily, loginUser);
         return ResultUtils.success(getDailyContent(daily.getDistPath()));
     }
 
@@ -200,18 +202,14 @@ public class DailyController {
         long current = dailyQueryRequest.getCurrent();
         long size = dailyQueryRequest.getPageSize();
         ThrowUtils.throwIf(size > 20, ErrorCode.PARAMS_ERROR);
-
-        String cacheKey = getPageCacheKey(dailyQueryRequest);
-        Object cacheValue = cacheManager.get(cacheKey);
-        if (cacheValue != null) {
-            return ResultUtils.success((Page<DailyVO>) cacheValue);
-        }
+        userService.getLoginUser(request);
+        dailyQueryRequest.setIsPublic(1);
 
         QueryWrapper<Daily> queryWrapper = dailyService.getQueryWrapper(dailyQueryRequest);
-        queryWrapper.select("id", "name", "distPath", "coverPath", "status", "userId", "createTime", "updateTime");
+        queryWrapper.select("id", "name", "distPath", "coverPath", "tags", "isPublic", "status",
+                "userId", "createTime", "updateTime");
         Page<Daily> dailyPage = dailyService.page(new Page<>(current, size), queryWrapper);
         Page<DailyVO> dailyVOPage = dailyService.getDailyVOPage(dailyPage, request);
-        cacheManager.put(cacheKey, dailyVOPage);
         return ResultUtils.success(dailyVOPage);
     }
 
@@ -250,7 +248,8 @@ public class DailyController {
         ThrowUtils.throwIf(size > 20, ErrorCode.PARAMS_ERROR);
 
         QueryWrapper<Daily> queryWrapper = dailyService.getQueryWrapper(dailyQueryRequest);
-        queryWrapper.select("id", "name", "distPath", "coverPath", "status", "userId", "createTime", "updateTime");
+        queryWrapper.select("id", "name", "distPath", "coverPath", "tags", "isPublic", "status",
+                "userId", "createTime", "updateTime");
         if (StrUtil.isBlank(dailyQueryRequest.getSortField())) {
             queryWrapper.orderByDesc("updateTime");
         }
@@ -292,6 +291,8 @@ public class DailyController {
 
         Daily daily = new Daily();
         BeanUtils.copyProperties(dailyEditRequest, daily);
+        List<String> tags = dailyEditRequest.getTags();
+        daily.setTags(JSONUtil.toJsonStr(tags));
         if (StrUtil.isBlank(daily.getDistPath())) {
             daily.setDistPath(null);
         }
@@ -449,6 +450,18 @@ public class DailyController {
         }
     }
 
+    private void checkDailyReadable(Daily daily, User loginUser) {
+        if (daily == null || loginUser == null) {
+            throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
+        }
+        if (Integer.valueOf(1).equals(daily.getIsPublic())
+                || loginUser.getId().equals(daily.getUserId())
+                || userService.isAdmin(loginUser)) {
+            return;
+        }
+        throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
+    }
+
     private String buildDailyDistPath(Long userId, Long dailyId) {
         return String.format("%s/%s/%s.md", DAILY_COS_DIR, userId, dailyId);
     }
@@ -473,7 +486,4 @@ public class DailyController {
         return normalizedPath;
     }
 
-    private static String getPageCacheKey(DailyQueryRequest dailyQueryRequest) {
-        return "daily:page:" + JSONUtil.toJsonStr(dailyQueryRequest);
-    }
 }

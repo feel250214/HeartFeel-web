@@ -101,10 +101,12 @@ public class DailyServiceImpl extends ServiceImpl<DailyMapper, Daily>
         Long id = dailyQueryRequest.getId();
         Long notId = dailyQueryRequest.getNotId();
         String searchText = dailyQueryRequest.getSearchText();
+        List<String> tags = dailyQueryRequest.getTags();
         Long userId = dailyQueryRequest.getUserId();
         String name = dailyQueryRequest.getName();
         String distPath = dailyQueryRequest.getDistPath();
         String coverPath = dailyQueryRequest.getCoverPath();
+        Integer isPublic = dailyQueryRequest.getIsPublic();
         Integer status = dailyQueryRequest.getStatus();
         String sortField = dailyQueryRequest.getSortField();
         String sortOrder = dailyQueryRequest.getSortOrder();
@@ -115,12 +117,18 @@ public class DailyServiceImpl extends ServiceImpl<DailyMapper, Daily>
                     .or().like("coverPath", searchText));
         }
         queryWrapper.like(StringUtils.isNotBlank(name), "name", name);
+        if (CollUtil.isNotEmpty(tags)) {
+            for (String tag : tags) {
+                queryWrapper.like("tags", "\"" + tag + "\"");
+            }
+        }
 
         queryWrapper.ne(ObjectUtils.isNotEmpty(notId), "id", notId);
         queryWrapper.eq(ObjectUtils.isNotEmpty(id), "id", id);
         queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "userId", userId);
         queryWrapper.eq(StringUtils.isNotBlank(distPath), "distPath", distPath);
         queryWrapper.eq(StringUtils.isNotBlank(coverPath), "coverPath", coverPath);
+        queryWrapper.eq(ObjectUtils.isNotEmpty(isPublic), "isPublic", isPublic);
         queryWrapper.eq(ObjectUtils.isNotEmpty(status), "status", status);
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), CommonConstant.SORT_ORDER_ASC.equals(sortOrder),
                 sortField);

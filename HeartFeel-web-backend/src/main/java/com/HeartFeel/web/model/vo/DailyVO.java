@@ -1,5 +1,7 @@
 package com.HeartFeel.web.model.vo;
 
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.HeartFeel.web.model.entity.Daily;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -8,6 +10,7 @@ import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 帖子视图
@@ -54,6 +57,16 @@ public class DailyVO implements Serializable {
     private String content;
 
     /**
+     * Tags.
+     */
+    private List<String> tags;
+
+    /**
+     * Whether this diary is visible to all logged-in users.
+     */
+    private Integer isPublic;
+
+    /**
      * 状态
      */
     private Integer status;
@@ -93,6 +106,7 @@ public class DailyVO implements Serializable {
         }
         Daily daily = new Daily();
         BeanUtils.copyProperties(dailyVO, daily);
+        daily.setTags(JSONUtil.toJsonStr(dailyVO.getTags()));
 
         return daily;
     }
@@ -109,6 +123,9 @@ public class DailyVO implements Serializable {
         }
         DailyVO dailyVO = new DailyVO();
         BeanUtils.copyProperties(daily, dailyVO);
+        if (StrUtil.isNotBlank(daily.getTags())) {
+            dailyVO.setTags(JSONUtil.toList(daily.getTags(), String.class));
+        }
 
         return dailyVO;
     }

@@ -105,8 +105,10 @@ declare namespace API {
     content?: string;
     coverPath?: string;
     distPath?: string;
+    isPublic?: number;
     name?: string;
     status?: number;
+    tags?: string[];
     userId?: number;
   };
 
@@ -115,7 +117,9 @@ declare namespace API {
     coverPath?: string;
     distPath?: string;
     id?: number;
+    isPublic?: number;
     name?: string;
+    tags?: string[];
   };
 
   type DailyQueryRequest = {
@@ -123,6 +127,7 @@ declare namespace API {
     current?: number;
     distPath?: string;
     id?: number;
+    isPublic?: number;
     name?: string;
     notId?: number;
     pageSize?: number;
@@ -130,6 +135,7 @@ declare namespace API {
     sortField?: string;
     sortOrder?: string;
     status?: number;
+    tags?: string[];
     userId?: number;
   };
 
@@ -138,8 +144,10 @@ declare namespace API {
     coverPath?: string;
     distPath?: string;
     id?: number;
+    isPublic?: number;
     name?: string;
     status?: number;
+    tags?: string[];
   };
 
   type DailyVO = {
@@ -150,8 +158,10 @@ declare namespace API {
     createTime?: string;
     distPath?: string;
     id?: number;
+    isPublic?: number;
     name?: string;
     status?: number;
+    tags?: string[];
     updateTime?: string;
     user?: UserVO;
     userId?: number;
