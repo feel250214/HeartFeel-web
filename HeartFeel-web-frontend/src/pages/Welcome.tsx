@@ -219,6 +219,11 @@ const Welcome: React.FC = () => {
             <ul id="line">
               <li>
                 <div className="focus"/>
+                <div>单词拼写上线</div>
+                <div>2026.06</div>
+              </li>
+              <li>
+                <div className="focus"/>
                 <div>日记功能上线</div>
                 <div>2026.04</div>
               </li>
@@ -416,8 +421,14 @@ const Welcome: React.FC = () => {
                 </div>
               </ProjectItem>
               <ProjectItem className="projectItem b">
+                <a href="http://dpqas.top:8787/qwerty-trainer">
+                  <div className="projectItemLeft">
+                    <h1>英语单词打字</h1>
+                    <p>在线练习打字</p>
+                  </div>
+                </a>
                 <div className="projectItemLeft">
-                  <h1>英语单词打字</h1>
+                  <h1></h1>
                   <p>未开发</p>
                 </div>
                 <div className="projectItemRight">

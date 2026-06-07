@@ -1,8 +1,16 @@
-import { listMyDailyVoByPageUsingPost } from '@/services/backend/dailyController';
+import {
+  listDailyVoByPageUsingPost,
+  listMyDailyVoByPageUsingPost,
+} from '@/services/backend/dailyController';
 import { getDailyCoverUrl } from '@/utils/cos';
 import { PictureOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons';
-import { PageContainer } from '@ant-design/pro-components';
-import { Avatar, Button, Card, Flex, Input, List, message, Space, Tag, Typography } from 'antd';
+import {
+  PageContainer,
+  ProFormSelect,
+  ProFormText,
+  QueryFilter,
+} from '@ant-design/pro-components';
+import { Avatar, Button, Card, Flex, List, message, Space, Tabs, Tag, Typography } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'umi';
@@ -19,6 +27,26 @@ const getStatusTag = (status?: number) => {
     return <Tag color="success">正常</Tag>;
   }
   return <Tag>已停用</Tag>;
+};
+
+const getVisibilityTag = (isPublic?: number) => {
+  if (isPublic === 1) {
+    return <Tag color="blue">公开</Tag>;
+  }
+  return <Tag>私有</Tag>;
+};
+
+const tagListView = (tags?: string[]) => {
+  if (!tags?.length) {
+    return null;
+  }
+  return (
+    <Space size={[0, 4]} wrap>
+      {tags.map((tag) => (
+        <Tag key={tag}>{tag}</Tag>
+      ))}
+    </Space>
+  );
 };
 
 const coverView = (data: API.DailyVO) => {
@@ -54,10 +82,10 @@ const coverView = (data: API.DailyVO) => {
 };
 
 const DailyHomePage: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<'my' | 'public'>('my');
   const [loading, setLoading] = useState<boolean>(true);
   const [dataList, setDataList] = useState<API.DailyVO[]>([]);
   const [total, setTotal] = useState<number>(0);
-  const [keyword, setKeyword] = useState<string>('');
   const [searchParams, setSearchParams] = useState<API.DailyQueryRequest>({
     ...DEFAULT_PAGE_PARAMS,
   });
@@ -65,22 +93,23 @@ const DailyHomePage: React.FC = () => {
   const doSearch = async () => {
     setLoading(true);
     try {
-      const res = await listMyDailyVoByPageUsingPost(searchParams);
+      const listApi = activeTab === 'my' ? listMyDailyVoByPageUsingPost : listDailyVoByPageUsingPost;
+      const res = await listApi(searchParams);
       setDataList(res.data?.records ?? []);
       setTotal(Number(res.data?.total) || 0);
     } catch (error: any) {
-      message.error('获取日记失败，' + error.message);
+      message.error('获取日记失败：' + error.message);
     }
     setLoading(false);
   };
 
   useEffect(() => {
     doSearch();
-  }, [searchParams]);
+  }, [activeTab, searchParams]);
 
   return (
     <PageContainer
-      title="我的日记"
+      title="日记"
       extra={
         <Link to="/daily/edit">
           <Button type="primary" icon={<PlusOutlined />}>
@@ -89,27 +118,36 @@ const DailyHomePage: React.FC = () => {
         </Link>
       }
     >
-      <Flex justify="center">
-        <Input.Search
-          style={{
-            width: '40vw',
-            minWidth: 320,
-          }}
-          placeholder="搜索日记标题"
-          allowClear
-          enterButton="搜索"
-          size="large"
-          value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
-          onSearch={(value: string) => {
-            setSearchParams({
-              ...DEFAULT_PAGE_PARAMS,
-              searchText: value,
-              name: value,
-            });
-          }}
-        />
-      </Flex>
+      <Tabs
+        size="large"
+        activeKey={activeTab}
+        items={[
+          { key: 'my', label: '我的日记' },
+          { key: 'public', label: '公开日记' },
+        ]}
+        onChange={(key) => {
+          setActiveTab(key as 'my' | 'public');
+          setSearchParams({ ...DEFAULT_PAGE_PARAMS });
+        }}
+      />
+
+      <QueryFilter
+        span={12}
+        labelWidth="auto"
+        labelAlign="left"
+        defaultCollapsed={false}
+        style={{ padding: '16px 0' }}
+        onFinish={async (values: API.DailyQueryRequest) => {
+          setSearchParams({
+            ...DEFAULT_PAGE_PARAMS,
+            ...values,
+            name: values.searchText,
+          });
+        }}
+      >
+        <ProFormText label="标题" name="searchText" />
+        <ProFormSelect label="标签" name="tags" mode="tags" />
+      </QueryFilter>
 
       <div style={{ marginBottom: 24 }} />
 
@@ -150,15 +188,14 @@ const DailyHomePage: React.FC = () => {
               }
             >
               <Space direction="vertical" size="middle" style={{ width: '100%' }}>
-                <Flex justify="space-between" align="center">
+                <Space wrap>
                   {getStatusTag(data.status)}
+                  {getVisibilityTag(data.isPublic)}
+                </Space>
+                {tagListView(data.tags)}
+                <Flex justify="space-between" align="center">
                   <Typography.Text type="secondary" style={{ fontSize: 12 }}>
                     {moment(data.createTime).fromNow()}
-                  </Typography.Text>
-                </Flex>
-                <Flex justify="space-between" align="center">
-                  <Typography.Text type="secondary" ellipsis style={{ maxWidth: '70%' }}>
-                    {data.distPath || 'Markdown 日记'}
                   </Typography.Text>
                   <Avatar src={data.user?.userAvatar} icon={<UserOutlined />} />
                 </Flex>

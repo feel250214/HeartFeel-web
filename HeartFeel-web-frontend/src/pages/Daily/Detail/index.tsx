@@ -4,7 +4,7 @@ import {
   getDailyVoByIdUsingGet,
 } from '@/services/backend/dailyController';
 import { getDailyCoverUrl } from '@/utils/cos';
-import { Link, useParams } from '@@/exports';
+import { Link, useModel, useParams } from '@@/exports';
 import { DeleteOutlined, DownloadOutlined, EditOutlined, UserOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
 import gfm from '@bytemd/plugin-gfm';
@@ -24,11 +24,34 @@ const getStatusTag = (status?: number) => {
   return <Tag>已停用</Tag>;
 };
 
+const getVisibilityTag = (isPublic?: number) => {
+  if (isPublic === 1) {
+    return <Tag color="blue">公开</Tag>;
+  }
+  return <Tag>私有</Tag>;
+};
+
+const tagListView = (tags?: string[]) => {
+  if (!tags?.length) {
+    return null;
+  }
+  return (
+    <Space size={[0, 4]} wrap>
+      {tags.map((tag) => (
+        <Tag key={tag}>{tag}</Tag>
+      ))}
+    </Space>
+  );
+};
+
 const DailyDetailPage: React.FC = () => {
   const { id } = useParams();
   const dailyId = id ? Number(id) : undefined;
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<API.DailyVO>({});
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState ?? {};
+  const canManage = currentUser?.id === data.userId || currentUser?.userRole === 'admin';
   const coverUrl = getDailyCoverUrl(data);
 
   const loadData = async () => {
@@ -116,6 +139,8 @@ const DailyDetailPage: React.FC = () => {
                 {data.name}
               </Typography.Title>
               {getStatusTag(data.status)}
+              {getVisibilityTag(data.isPublic)}
+              {tagListView(data.tags)}
             </Space>
             <Space size="middle" wrap>
               <Avatar src={data.user?.userAvatar} icon={<UserOutlined />} />
@@ -128,26 +153,28 @@ const DailyDetailPage: React.FC = () => {
               </Typography.Text>
             </Space>
           </Space>
-          <Space wrap>
-            <Link to={`/daily/edit?id=${data.id}`}>
-              <Button icon={<EditOutlined />}>编辑</Button>
-            </Link>
-            <Button icon={<DownloadOutlined />} onClick={doDownload}>
-              下载
-            </Button>
-            <Popconfirm
-              title="删除日记"
-              description="删除后不可恢复，确定删除这篇日记吗？"
-              okText="删除"
-              cancelText="取消"
-              okButtonProps={{ danger: true }}
-              onConfirm={doDelete}
-            >
-              <Button danger icon={<DeleteOutlined />}>
-                删除
+          {canManage && (
+            <Space wrap>
+              <Link to={`/daily/edit?id=${data.id}`}>
+                <Button icon={<EditOutlined />}>编辑</Button>
+              </Link>
+              <Button icon={<DownloadOutlined />} onClick={doDownload}>
+                下载
               </Button>
-            </Popconfirm>
-          </Space>
+              <Popconfirm
+                title="删除日记"
+                description="删除后不可恢复，确定删除这篇日记吗？"
+                okText="删除"
+                cancelText="取消"
+                okButtonProps={{ danger: true }}
+                onConfirm={doDelete}
+              >
+                <Button danger icon={<DeleteOutlined />}>
+                  删除
+                </Button>
+              </Popconfirm>
+            </Space>
+          )}
         </Flex>
       </Card>
 

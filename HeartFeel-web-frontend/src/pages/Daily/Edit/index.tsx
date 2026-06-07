@@ -10,16 +10,17 @@ import {
 import { getDailyCoverUrl } from '@/utils/cos';
 import { useSearchParams } from '@@/exports';
 import type { ProFormInstance } from '@ant-design/pro-components';
-import { PageContainer, ProCard, ProForm, ProFormText } from '@ant-design/pro-components';
+import { PageContainer, ProCard, ProForm, ProFormSelect, ProFormText } from '@ant-design/pro-components';
 import { ProFormItem } from '@ant-design/pro-form';
 import gfm from '@bytemd/plugin-gfm';
 import { Editor } from '@bytemd/react';
 import { history } from '@umijs/max';
-import { Button, Empty, Flex, Input, List, message, Modal, Space, Typography } from 'antd';
+import { Button, Empty, Flex, Input, List, message, Modal, Space, Switch, Tag, Typography } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 
 const plugins = [gfm()];
+const DailyEditor = Editor as React.ComponentType<any>;
 
 const TEMPLATE_PAGE_PARAMS: API.DailyQueryRequest = {
   current: 1,
@@ -68,6 +69,8 @@ const DailyEditPage: React.FC = () => {
         name: res.data?.name,
         content: res.data?.content,
         coverPath: res.data?.coverPath || res.data?.coverUrl || res.data?.cover,
+        tags: res.data?.tags,
+        isPublic: res.data?.isPublic ?? 0,
       });
     } catch (error: any) {
       message.error('加载日记失败，' + error.message);
@@ -119,6 +122,8 @@ const DailyEditPage: React.FC = () => {
         name: template.name,
         content: res.data ?? template.content ?? '',
         coverPath: template.coverPath || template.coverUrl || template.cover,
+        tags: template.tags,
+        isPublic: template.isPublic ?? 0,
       });
       setCoverPath(template.coverPath || template.coverUrl || template.cover);
       setCoverUrl(getDailyCoverUrl(template));
@@ -135,6 +140,8 @@ const DailyEditPage: React.FC = () => {
       name: values.name?.trim(),
       content: values.content ?? '',
       coverPath: values.coverPath || coverPath,
+      tags: values.tags,
+      isPublic: values.isPublic ?? 0,
     };
 
     try {
@@ -209,8 +216,26 @@ const DailyEditPage: React.FC = () => {
                 }}
               />
             </ProFormItem>
+            <ProFormSelect
+              name="tags"
+              label="标签"
+              mode="tags"
+              placeholder="请输入标签列表"
+            />
+            <ProFormItem
+              name="isPublic"
+              label="公开"
+              initialValue={0}
+              valuePropName="checked"
+              getValueProps={(value) => ({
+                checked: value === 1,
+              })}
+              getValueFromEvent={(checked) => (checked ? 1 : 0)}
+            >
+              <Switch checkedChildren="公开" unCheckedChildren="私有" />
+            </ProFormItem>
             <ProFormItem name="content" label="正文">
-              <Editor
+              <DailyEditor
                 plugins={plugins}
                 mode="auto"
                 placeholder="记录今天的想法..."
@@ -296,6 +321,12 @@ const DailyEditPage: React.FC = () => {
                       <Typography.Text type="secondary" style={{ fontSize: 12 }}>
                         {moment(item.updateTime || item.createTime).format('YYYY-MM-DD HH:mm')}
                       </Typography.Text>
+                      <Space wrap size={[0, 4]}>
+                        {item.isPublic === 1 ? <Tag color="blue">公开</Tag> : <Tag>私有</Tag>}
+                        {item.tags?.map((tag) => (
+                          <Tag key={tag}>{tag}</Tag>
+                        ))}
+                      </Space>
                     </Flex>
                   }
                 />
