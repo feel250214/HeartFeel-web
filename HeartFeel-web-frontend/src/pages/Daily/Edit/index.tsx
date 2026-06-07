@@ -22,6 +22,10 @@ import React, { useEffect, useRef, useState } from 'react';
 const plugins = [gfm()];
 const DailyEditor = Editor as React.ComponentType<any>;
 
+const isPublicDaily = (isPublic?: number | string | boolean) => {
+  return isPublic === 1 || isPublic === '1' || isPublic === true || isPublic === 'true';
+};
+
 const TEMPLATE_PAGE_PARAMS: API.DailyQueryRequest = {
   current: 1,
   pageSize: 8,
@@ -70,7 +74,7 @@ const DailyEditPage: React.FC = () => {
         content: res.data?.content,
         coverPath: res.data?.coverPath || res.data?.coverUrl || res.data?.cover,
         tags: res.data?.tags,
-        isPublic: res.data?.isPublic ?? 0,
+        isPublic: isPublicDaily(res.data?.isPublic) ? 1 : 0,
       });
     } catch (error: any) {
       message.error('加载日记失败，' + error.message);
@@ -123,7 +127,7 @@ const DailyEditPage: React.FC = () => {
         content: res.data ?? template.content ?? '',
         coverPath: template.coverPath || template.coverUrl || template.cover,
         tags: template.tags,
-        isPublic: template.isPublic ?? 0,
+        isPublic: isPublicDaily(template.isPublic) ? 1 : 0,
       });
       setCoverPath(template.coverPath || template.coverUrl || template.cover);
       setCoverUrl(getDailyCoverUrl(template));
@@ -228,7 +232,7 @@ const DailyEditPage: React.FC = () => {
               initialValue={0}
               valuePropName="checked"
               getValueProps={(value) => ({
-                checked: value === 1,
+                checked: isPublicDaily(value),
               })}
               getValueFromEvent={(checked) => (checked ? 1 : 0)}
             >
@@ -322,7 +326,7 @@ const DailyEditPage: React.FC = () => {
                         {moment(item.updateTime || item.createTime).format('YYYY-MM-DD HH:mm')}
                       </Typography.Text>
                       <Space wrap size={[0, 4]}>
-                        {item.isPublic === 1 ? <Tag color="blue">公开</Tag> : <Tag>私有</Tag>}
+                        {isPublicDaily(item.isPublic) ? <Tag color="blue">公开</Tag> : <Tag>私有</Tag>}
                         {item.tags?.map((tag) => (
                           <Tag key={tag}>{tag}</Tag>
                         ))}

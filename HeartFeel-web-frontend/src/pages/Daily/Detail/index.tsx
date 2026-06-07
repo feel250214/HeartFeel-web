@@ -24,8 +24,12 @@ const getStatusTag = (status?: number) => {
   return <Tag>已停用</Tag>;
 };
 
-const getVisibilityTag = (isPublic?: number) => {
-  if (isPublic === 1) {
+const isPublicDaily = (isPublic?: number | string | boolean) => {
+  return isPublic === 1 || isPublic === '1' || isPublic === true || isPublic === 'true';
+};
+
+const getVisibilityTag = (isPublic?: number | string | boolean) => {
+  if (isPublicDaily(isPublic)) {
     return <Tag color="blue">公开</Tag>;
   }
   return <Tag>私有</Tag>;
