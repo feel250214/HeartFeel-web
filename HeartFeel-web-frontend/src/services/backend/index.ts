@@ -6,11 +6,15 @@ import * as dailyController from './dailyController';
 import * as fileController from './fileController';
 import * as generatorController from './generatorController';
 import * as healthController from './healthController';
+import * as qwertyDictionaryController from './qwertyDictionaryController';
+import * as qwertyTtsController from './qwertyTtsController';
 import * as userController from './userController';
 export default {
   dailyController,
   fileController,
   generatorController,
   healthController,
+  qwertyDictionaryController,
+  qwertyTtsController,
   userController,
 };

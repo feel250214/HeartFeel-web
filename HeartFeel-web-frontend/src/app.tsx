@@ -35,11 +35,7 @@ export async function getInitialState(): Promise<InitialState> {
 export const layout: RunTimeLayoutConfig = ({ initialState }) => {
   return {
     logo,
-    avatarProps: {
-      render: () => {
-        return <AvatarDropdown />;
-      },
-    },
+    actionsRender: () => [<AvatarDropdown key="user" />],
     waterMarkProps: {
       content: initialState?.currentUser?.userName,
     },

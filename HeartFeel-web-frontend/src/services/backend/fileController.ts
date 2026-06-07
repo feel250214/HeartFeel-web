@@ -134,3 +134,18 @@ export async function uploadFileVoUsingPost(
     ...(options || {}),
   });
 }
+
+/** viewFile GET /api/file/view */
+export async function viewFileUsingGet(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.viewFileUsingGETParams,
+  options?: { [key: string]: any },
+) {
+  return request<any>('/api/file/view', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}

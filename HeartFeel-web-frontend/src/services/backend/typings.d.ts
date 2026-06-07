@@ -17,6 +17,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseListQwertyWordVO_ = {
+    code?: number;
+    data?: QwertyWordVO[];
+    message?: string;
+  };
+
   type BaseResponseLoginUserVO_ = {
     code?: number;
     data?: LoginUserVO;
@@ -47,6 +53,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponsePageQwertyDictionaryVO_ = {
+    code?: number;
+    data?: PageQwertyDictionaryVO_;
+    message?: string;
+  };
+
   type BaseResponsePageUser_ = {
     code?: number;
     data?: PageUser_;
@@ -62,6 +74,12 @@ declare namespace API {
   type BaseResponseString_ = {
     code?: number;
     data?: string;
+    message?: string;
+  };
+
+  type BaseResponseTtsSynthesizeVO_ = {
+    code?: number;
+    data?: TtsSynthesizeVO;
     message?: string;
   };
 
@@ -85,7 +103,6 @@ declare namespace API {
 
   type DailyAddRequest = {
     content?: string;
-    cover?: string;
     coverPath?: string;
     distPath?: string;
     name?: string;
@@ -95,7 +112,6 @@ declare namespace API {
 
   type DailyEditRequest = {
     content?: string;
-    cover?: string;
     coverPath?: string;
     distPath?: string;
     id?: number;
@@ -119,7 +135,6 @@ declare namespace API {
 
   type DailyUpdateRequest = {
     content?: string;
-    cover?: string;
     coverPath?: string;
     distPath?: string;
     id?: number;
@@ -306,6 +321,11 @@ declare namespace API {
     id?: number;
   };
 
+  type getDictionaryContentUsingGETParams = {
+    /** id */
+    id?: number;
+  };
+
   type getGeneratorVOByIdUsingGETParams = {
     /** id */
     id?: number;
@@ -403,6 +423,19 @@ declare namespace API {
     total?: number;
   };
 
+  type PageQwertyDictionaryVO_ = {
+    countId?: string;
+    current?: number;
+    maxLimit?: number;
+    optimizeCountSql?: boolean;
+    orders?: OrderItem[];
+    pages?: number;
+    records?: QwertyDictionaryVO[];
+    searchCount?: boolean;
+    size?: number;
+    total?: number;
+  };
+
   type PageUser_ = {
     countId?: string;
     current?: number;
@@ -429,9 +462,84 @@ declare namespace API {
     total?: number;
   };
 
+  type QwertyDictionaryQueryRequest = {
+    category?: string;
+    current?: number;
+    id?: number;
+    language?: string;
+    languageCategory?: string;
+    name?: string;
+    notId?: number;
+    pageSize?: number;
+    searchText?: string;
+    sortField?: string;
+    sortOrder?: string;
+    status?: number;
+    userId?: number;
+    visibility?: string;
+  };
+
+  type QwertyDictionaryUpdateRequest = {
+    category?: string;
+    description?: string;
+    id?: number;
+    language?: string;
+    languageCategory?: string;
+    name?: string;
+    status?: number;
+    visibility?: string;
+  };
+
+  type QwertyDictionaryVO = {
+    category?: string;
+    createTime?: string;
+    description?: string;
+    id?: number;
+    language?: string;
+    languageCategory?: string;
+    name?: string;
+    status?: number;
+    updateTime?: string;
+    user?: UserVO;
+    userId?: number;
+    visibility?: string;
+    wordCount?: number;
+  };
+
+  type QwertyWordVO = {
+    examples?: string[];
+    name?: string;
+    tags?: string[];
+    trans?: string[];
+    ukphone?: string;
+    usphone?: string;
+  };
+
   type testDownloadFileUsingGETParams = {
     /** filepath */
     filepath?: string;
+  };
+
+  type TtsSynthesizeRequest = {
+    language?: string;
+    rate?: number;
+    text?: string;
+  };
+
+  type TtsSynthesizeVO = {
+    audioBase64?: string;
+    cacheKey?: string;
+    engine?: string;
+    mimeType?: string;
+  };
+
+  type uploadDictionaryUsingPOSTParams = {
+    category?: string;
+    description?: string;
+    language?: string;
+    languageCategory?: string;
+    name?: string;
+    visibility?: string;
   };
 
   type uploadFileUsingPOSTParams = {
@@ -512,5 +620,10 @@ declare namespace API {
     userName?: string;
     userProfile?: string;
     userRole?: string;
+  };
+
+  type viewFileUsingGETParams = {
+    /** filepath */
+    filepath?: string;
   };
 }

@@ -2,6 +2,10 @@
 /HeartFeel-web-backend/src/main/resources/application-prod.yml
 /HeartFeel-web-backend/target/
 /HeartFeel-web-backend/.temp/
+/HeartFeel-web-backend/logs/
+/HeartFeel-web-backend/runtime/tts/**
+!/HeartFeel-web-backend/runtime/tts/
+!/HeartFeel-web-backend/runtime/tts/README.md
 /HeartFeel-web-frontend/dist/
 /HeartFeel-web-frontend/node_modules/
 

@@ -51,43 +51,63 @@ export default [
     hideInMenu: true,
   },
 
+  // 单词记忆训练主页
+  {
+    path: '/qwerty-trainer',
+    access: 'canUser',
+    icon: 'VerticalAlignBottomOutlined',
+    component: './QwertyTrainer',
+    name: '键盘记忆训练',
+  },
+
   // 生成器路径
   {
-    path: '/generator/home',
+    path: '/generator',
     icon: 'home',
-    component: './Generator/Home',
-    name: '生成器主页',
-  },
-  {
-    path: '/generator/add',
-    icon: 'plus',
-    component: './Generator/Add',
-    name: '创建生成器',
-  },
-  {
-    path: '/generator/update',
-    icon: 'plus',
+    name: '生成器',
     access: 'canUser',
-    component: './Generator/Add',
-    name: '修改生成器',
-    hideInMenu: true,
+    routes: [
+      {
+        path: '/generator/home',
+        icon: 'home',
+        component: './Generator/Home',
+        name: '生成器主页',
+      },
+      {
+        path: '/generator/add',
+        icon: 'plus',
+        component: './Generator/Add',
+        name: '创建生成器',
+      },
+      {
+        path: '/generator/update',
+        icon: 'plus',
+        access: 'canUser',
+        component: './Generator/Add',
+        name: '修改生成器',
+        hideInMenu: true,
+      },
+      {
+        path: '/generator/use/:id',
+        icon: 'AuditOutlined',
+        access: 'canUser',
+        component: './Generator/Use',
+        name: '使用生成器',
+        hideInMenu: true,
+      },
+      {
+        path: '/generator/Detail/:id',
+        icon: 'plus',
+        access: 'canUser',
+        component: './Generator/Detail',
+        name: '生成器详情',
+        hideInMenu: true,
+      },
+    ],
   },
-  {
-    path: '/generator/use/:id',
-    icon: 'AuditOutlined',
-    access: 'canUser',
-    component: './Generator/Use',
-    name: '使用生成器',
-    hideInMenu: true,
-  },
-  {
-    path: '/generator/Detail/:id',
-    icon: 'plus',
-    access: 'canUser',
-    component: './Generator/Detail',
-    name: '生成器详情',
-    hideInMenu: true,
-  },
+
+
+
   // 管理员路径
   {
     path: '/admin',

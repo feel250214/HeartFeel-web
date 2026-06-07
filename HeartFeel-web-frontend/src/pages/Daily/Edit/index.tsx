@@ -190,7 +190,7 @@ const DailyEditPage: React.FC = () => {
             <ProFormItem
               name="coverPath"
               label="封面图"
-              extra="支持任意尺寸图片，上传前请在网页中裁剪为 4:3，图片会压缩到 3MB 以内再上传到 COS。"
+              extra="图片会压缩到 3MB 以内再上传"
             >
               <PictureUploader
                 biz="daily_cover"

@@ -1,0 +1,455 @@
+.qwerty-trainer-page {
+  --qt-bg: #f7f9fc;
+  --qt-surface: #ffffff;
+  --qt-surface-2: #eef4ff;
+  --qt-text: #142033;
+  --qt-muted: #667085;
+  --qt-border: #d9e2f2;
+  --qt-primary: #1d4ed8;
+  --qt-accent: #b45309;
+  --qt-danger: #dc2626;
+  --qt-success: #15803d;
+  min-height: calc(100vh - 112px);
+  padding: 18px;
+  background: var(--qt-bg);
+  color: var(--qt-text);
+  border-radius: 8px;
+}
+
+.qwerty-trainer-page.dark {
+  --qt-bg: #111827;
+  --qt-surface: #172033;
+  --qt-surface-2: #223049;
+  --qt-text: #edf2fb;
+  --qt-muted: #a6b3c6;
+  --qt-border: #34445f;
+  --qt-primary: #8bb4ff;
+  --qt-accent: #f5b84b;
+  --qt-danger: #f87171;
+  --qt-success: #4ade80;
+}
+
+.qwerty-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 1480px;
+  margin: 0 auto 16px;
+}
+
+.qwerty-topbar h1,
+.qwerty-training-toolbar h2,
+.qwerty-result h3 {
+  margin: 0;
+}
+
+.qwerty-topbar h1 {
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+.qwerty-eyebrow {
+  margin-bottom: 4px;
+  color: var(--qt-muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.qwerty-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  max-width: 1480px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.qwerty-sidebar,
+.qwerty-training,
+.qwerty-stats {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+.qwerty-drawer-root {
+  --qt-bg: #f7f9fc;
+  --qt-surface: #ffffff;
+  --qt-surface-2: #eef4ff;
+  --qt-text: #142033;
+  --qt-muted: #667085;
+  --qt-border: #d9e2f2;
+  --qt-primary: #1d4ed8;
+  --qt-accent: #b45309;
+  --qt-danger: #dc2626;
+  --qt-success: #15803d;
+}
+
+.qwerty-drawer-root.dark {
+  --qt-bg: #111827;
+  --qt-surface: #172033;
+  --qt-surface-2: #223049;
+  --qt-text: #edf2fb;
+  --qt-muted: #a6b3c6;
+  --qt-border: #34445f;
+  --qt-primary: #8bb4ff;
+  --qt-accent: #f5b84b;
+  --qt-danger: #f87171;
+  --qt-success: #4ade80;
+}
+
+.qwerty-drawer-root .ant-drawer-content,
+.qwerty-drawer-root .ant-drawer-header {
+  background: var(--qt-bg);
+  color: var(--qt-text);
+}
+
+.qwerty-drawer-root .ant-drawer-title,
+.qwerty-drawer-root .ant-drawer-close,
+.qwerty-drawer-root .ant-list-item-meta-title,
+.qwerty-drawer-root .ant-list-item-meta-description,
+.qwerty-drawer-root .ant-empty-description {
+  color: var(--qt-text);
+}
+
+.qwerty-panel,
+.qwerty-training-toolbar,
+.qwerty-surface {
+  background: var(--qt-surface);
+  border: 1px solid var(--qt-border);
+  border-radius: 8px;
+  box-shadow: 0 12px 34px rgba(24, 40, 72, 0.08);
+}
+
+.qwerty-panel {
+  padding: 16px;
+}
+
+.qwerty-panel.compact {
+  padding: 14px;
+}
+
+.qwerty-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.qwerty-full {
+  width: 100%;
+}
+
+.qwerty-dictionary-item {
+  margin-bottom: 8px;
+  padding: 10px 12px !important;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 180ms ease, border-color 180ms ease;
+}
+
+.qwerty-dictionary-item:hover,
+.qwerty-dictionary-item.active {
+  background: var(--qt-surface-2);
+  border-color: var(--qt-border);
+}
+
+.qwerty-dictionary-item.active .ant-list-item-meta-title {
+  color: var(--qt-primary);
+}
+
+.qwerty-training-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+}
+
+.qwerty-surface {
+  min-height: 520px;
+  padding: 18px;
+  outline: none;
+}
+
+.qwerty-surface:focus {
+  box-shadow: 0 12px 34px rgba(24, 40, 72, 0.08), 0 0 0 3px rgba(37, 99, 235, 0.18);
+}
+
+.qwerty-surface.no-select {
+  user-select: none;
+}
+
+.qwerty-progress-row {
+  display: grid;
+  grid-template-columns: auto minmax(120px, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  color: var(--qt-muted);
+  font-size: 13px;
+}
+
+.qwerty-neighbors {
+  display: flex;
+  justify-content: space-between;
+  min-height: 24px;
+  margin-top: 18px;
+  color: var(--qt-muted);
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+}
+
+.qwerty-word-card {
+  position: relative;
+  margin-top: 14px;
+  padding: 34px 16px 22px;
+  background: var(--qt-surface-2);
+  border: 1px solid var(--qt-border);
+  border-radius: 8px;
+}
+
+.qwerty-word-card.finished {
+  border-color: rgba(21, 128, 61, 0.5);
+}
+
+.qwerty-word-actions {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.qwerty-word-display {
+  min-height: 82px;
+  padding: 16px 72px 4px;
+  color: var(--qt-text);
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  font-size: clamp(30px, 5.2vw, 58px);
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overflow-wrap: normal;
+  white-space: nowrap;
+  scrollbar-width: thin;
+}
+
+.qwerty-word-display.hidden,
+.qwerty-translation.hidden {
+  color: var(--qt-muted);
+}
+
+.qwerty-word-display .char {
+  display: inline-block;
+  min-width: 0.5em;
+}
+
+.qwerty-word-display .char.correct {
+  color: var(--qt-success);
+}
+
+.qwerty-word-display .char.wrong {
+  color: var(--qt-danger);
+}
+
+.qwerty-word-display .char.pending {
+  color: var(--qt-text);
+}
+
+.qwerty-phonetic,
+.qwerty-translation,
+.qwerty-input-hint {
+  text-align: center;
+}
+
+.qwerty-phonetic {
+  margin-top: 8px;
+  color: var(--qt-muted);
+}
+
+.qwerty-translation {
+  margin-top: 10px;
+  color: var(--qt-text);
+  font-size: 16px;
+}
+
+.qwerty-input-hint {
+  min-height: 24px;
+  margin-top: 18px;
+  color: var(--qt-muted);
+  overflow-wrap: anywhere;
+}
+
+.qwerty-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.qwerty-metrics.two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 0;
+}
+
+.qwerty-metric {
+  min-height: 76px;
+  padding: 12px;
+  background: var(--qt-surface-2);
+  border: 1px solid var(--qt-border);
+  border-radius: 8px;
+}
+
+.qwerty-metric span {
+  display: block;
+  color: var(--qt-muted);
+  font-size: 12px;
+}
+
+.qwerty-metric strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.qwerty-result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 14px;
+  padding: 16px;
+  background: rgba(21, 128, 61, 0.08);
+  border: 1px solid rgba(21, 128, 61, 0.24);
+  border-radius: 8px;
+}
+
+.qwerty-result p {
+  margin: 6px 0 0;
+  color: var(--qt-muted);
+}
+
+.qwerty-chart {
+  width: 100%;
+  height: 180px;
+  margin-top: 14px;
+}
+
+.qwerty-heatmap {
+  display: grid;
+  grid-template-columns: repeat(14, 1fr);
+  gap: 5px;
+  margin-top: 12px;
+}
+
+.qwerty-heatmap .heat {
+  aspect-ratio: 1;
+  border-radius: 4px;
+  background: #d8dee9;
+}
+
+.qwerty-heatmap .heat-1 {
+  background: #bfdbfe;
+}
+
+.qwerty-heatmap .heat-2 {
+  background: #60a5fa;
+}
+
+.qwerty-heatmap .heat-3 {
+  background: #2563eb;
+}
+
+.qwerty-heatmap .heat-4 {
+  background: #1e3a8a;
+}
+
+.qwerty-wrong-list {
+  display: grid;
+  gap: 8px;
+}
+
+.qwerty-wrong-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  background: var(--qt-surface-2);
+  border-radius: 8px;
+}
+
+.qwerty-wrong-item span {
+  overflow-wrap: anywhere;
+}
+
+.qwerty-settings-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.qwerty-setting-switch,
+.qwerty-setting-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 44px;
+}
+
+.qwerty-setting-field .ant-select,
+.qwerty-setting-field .ant-input-number {
+  width: 180px;
+}
+
+.qwerty-trainer-page.dark .ant-list-item-meta-title,
+.qwerty-trainer-page.dark .ant-list-item-meta-description,
+.qwerty-trainer-page.dark .ant-empty-description {
+  color: var(--qt-text);
+}
+
+@media (max-width: 1180px) {
+  .qwerty-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .qwerty-sidebar,
+  .qwerty-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .qwerty-trainer-page {
+    padding: 12px;
+  }
+
+  .qwerty-topbar,
+  .qwerty-training-toolbar,
+  .qwerty-result {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .qwerty-sidebar,
+  .qwerty-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .qwerty-word-display {
+    padding-right: 8px;
+    padding-left: 8px;
+    font-size: clamp(28px, 10vw, 42px);
+  }
+
+  .qwerty-metrics,
+  .qwerty-metrics.two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

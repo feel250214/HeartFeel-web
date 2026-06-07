@@ -100,3 +100,21 @@ xxl:
       logpath: logs/jobhandler
       # xxl-job executor log-retention-days
       logretentiondays: 30
+
+qwerty:
+  tts:
+    enabled: true
+    embedded: true
+    autoStart: true
+    timeoutMs: 8000
+    maxTextLength: 120
+    paddle:
+      baseUrl: http://127.0.0.1:8090
+      command: paddlespeech_server start --config_file runtime/tts/paddlespeech/application.yaml
+      spkId: 0
+      volume: 1.0
+      sampleRate: 0
+    voicevox:
+      baseUrl: http://127.0.0.1:50021
+      command: runtime/tts/voicevox/run.exe --host 127.0.0.1 --port 50021
+      speakerId: 1
